@@ -276,3 +276,51 @@ Missing: 2 lines
 Coverage: 85%
 -------------
 ```
+
+#### Finish Off Those Tests
+
+Let's quickly "write" the remaining tests...
+
+```shell
+rm -f ./tests/test_new_code.py
+touch ./tests/test_new_code.py
+
+echo -e "from app import new_code\n\n" >> ./tests/test_new_code.py
+for i in $(seq 1 7);
+do
+    echo -e "def test_untested_$i():\n    assert $i == new_code.untested_$i()\n\n" >> ./tests/test_new_code.py
+done
+```
+
+This appeases both `pytest` (with a whopping 28.33% covered) and `diff-cover` (100%)! 🤘
+
+#### What About Code Changes
+
+Let's revisit the quote from `diff-cover`'s docs (with added emphasis):
+
+> Diff coverage is the percentage of **new or modified** lines that are covered by tests. This provides a clear and achievable standard for code review: If you touch a line of code, that line should be covered. Code coverage is _every_ developer's responsibility!
+
+So let's see that in action by changing a method in [`./app/ghouls/ghost.py`](./app/ghouls/ghost.py)...
+
+##### But I only changed one character?
+
+You changed a line of code?
+
+You now own that code!
+
+So you better hope it's already covered by existing, or you bet you have to write tests for that method 😎
+
+```text
+Failure. Coverage is below 100%.
+-------------
+Diff Coverage
+Diff: origin/main...HEAD, staged, unstaged and untracked changes
+-------------
+app/ghouls/ghost.py (0.0%): Missing lines 9
+app/new_code.py (100%)
+-------------
+Total:   15 lines
+Missing: 1 line
+Coverage: 93%
+-------------
+```
